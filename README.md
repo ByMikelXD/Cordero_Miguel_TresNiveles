@@ -1,4 +1,5 @@
-# Cordero_Miguel_RecISO
+# lamp_tres_niveles
+### Balanceador de carga con infraestructura LAMP en tres niveles.
 
 # Índice
 1. [Introducción](#introducción)

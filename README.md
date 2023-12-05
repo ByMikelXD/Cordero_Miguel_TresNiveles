@@ -1,154 +1,159 @@
 # Cordero_Miguel_RecISO
 
-# Índice.
-1. [Introducción.](#introducción)
-2. [Infraestructura.](#infraestructura)
-   * [Infraestructura de red.](#infraestructura-de-red)
-3. [Resultado.](#Resultado)
+# Índice
+1. [Introducción](#introducción)
+2. [Infraestructura](#infraestructura)
+   * [Infraestructura de red](#infraestructura-de-red)
+3. [Balanceador](#configuración-del-balanceador)
+4. [Resultado](#resultado)
+5. [Apache-Sever1](#configuración-del-servidor-de-apache-1)
+6. [MYSQL](#configuración-del-servidor-de-base-de-datos-mysql)
 
-
-# Introducción.
+# Introducción
 
 En este proyecto se realiza la infraestructura de una pila LAMP en tres niveles sobre máquinas virtuales en AWS.
 
-En un primer nivel tendremos el balanceador de carga.
-En el segundo nivel tendremos dos servidores web en Backend.
-En el tercer nivel tendremos el servidor de bases de datos.
+En un primer nivel, tendremos el balanceador de carga. En el segundo nivel, tendremos dos servidores web en Backend. En el tercer nivel, tendremos el servidor de bases de datos.
 
-# Infraestructura.
+# Infraestructura
 
 En este proyecto se explicarán detalladamente los pasos a seguir para la creación de la infraestructura necesaria.
 
-## Infraestructura de red.
+## Infraestructura de red
 
 #### VPC
 
-En primer lugar creamos una VPC. Vamos al menú de servicios de AWS, elegimos VPC y pulsamos sobre el botón de Crear VPC.
+En primer lugar, creamos una VPC. Vamos al menú de servicios de AWS, elegimos VPC y pulsamos sobre el botón de Crear VPC.
 
-En este menú tenemos dos opciones, Solo la VPC y la opción VPC y más. La diferencia entre ellas es que con la primera solo creamos la VPC y con la segunda podemos crear las subredes, las tablas de enrutamiento y las puertas de enlace desde el mismo menú.
+En este menú, tenemos dos opciones: Solo la VPC y la opción VPC y más. La diferencia entre ellas es que con la primera solo creamos la VPC, y con la segunda podemos crear las subredes, las tablas de enrutamiento y las puertas de enlace desde el mismo menú.
 
+Primero, creamos nuestras VPC donde vamos a alojar nuestras dos subredes: la subred 1 donde estará el balanceador junto a nuestros servidores apache y en la segunda subred donde se almacenará el servidor MySQL.
 
-Primero tenemos que crear nuestras vpc donde vamos a albergar nuestras dos subredes la subred 1 donde estará el Balanceador junto a nuestros servidores apache y en la segunda subred donde se almacenará el servidor mysql.
+![Imagen 1](Fotos/1.png)
+![Imagen 2](Fotos/2.png)
+![Imagen 3](Fotos/3.png)
 
-![](Fotos/1.png)
-![](Fotos/2.png)
-![](Fotos/3.png)
+Editamos reglas de entrada.
 
-Editamos reglas de entrada
+![Imagen 4](Fotos/4.png)
 
-![](Fotos/4.png)
+Editamos las reglas de salida.
 
-Editamos las reglas de salida
+![Imagen 5](Fotos/5.png)
 
-![](Fotos/5.png)
+Creamos las instancias. Las instancias que he usado son Debian.
 
-Creamos las Instancias 
-Las instancias que he usado son debian 
+![Imagen 6](Fotos/6.png)
+![Imagen 7](Fotos/7.png)
 
-![](Fotos/6.png)
-![](Fotos/7.png)
+A continuación, vamos a asociar una IP estática al balanceador para poder conectarnos y tener acceso a Internet.
 
-A continuación vamos a asociar una ip estática al balanceador para poder conectarnos y tener acceso a internet.
+![Imagen 8](Fotos/8.png)
 
-![](Fotos/8.png)
+Conectamos la gateway antes creada a Internet.
 
-Conectamos la gateway antes creada a internet.
+![Imagen 9](Fotos/9.png)
 
-![](Fotos/9.png)
+Luego nos vamos a asociar una dirección IP elástica para tener acceso a Internet desde el balanceador.
 
-Luego nos vamos a asociar una dirección ip elástica para tener accesoa internet desde el balanceador.
+![Imagen 10](Fotos/10.png)
 
-![](Fotos/10.png)
+Aquí podemos ver que nos la ha asociado al balanceador.
 
-Aquí podemos ver que nos la ha asociado al balanceador
+![Imagen 11](Fotos/11.png)
 
-![](Fotos/11.png)
+Se me olvidaba decir que tenemos que poner una puerta de enlace a Internet para poder tener Internet en las otras máquinas mientras las configuramos y descargamos los archivos necesarios.
 
-Se me olvidaba decir que tenemos que poner una puerta de enlace a internet para poder tener internet en la otras máquina mientras las configuramos y descargamos los archivos necesarios.
+![Imagen 12](Fotos/12.png)
 
-![](Fotos/12.png)
+# Configuración del balanceador
 
--Configuración del balanceador
+Copiamos el contenido del archivo default por si liamos y le ponemos un nombre para saber cuál es.
 
-Copiamos el contenido del archivo default por si liamos y le ponemos un nombre para saber cual es.
-![](Fotos/13.png)
+![Imagen 13](Fotos/13.png)
 
-A continuación dentro del balanceador copiamos lo siguiente
-![](Fotos/14.png)
+A continuación, dentro del balanceador copiamos lo siguiente.
 
-Luego de copiar lo anterior habilitamos el sitio web con a2ensite y le damos los permisos
+![Imagen 14](Fotos/14.png)
 
-Nos vamos a nuestro explorador y  ponemos la ip del balanceador
+Luego de copiar lo anterior, habilitamos el sitio web con `a2ensite` y le damos los permisos.
 
-![](Fotos/15.png)
-![](Fotos/16.png)
+Nos vamos a nuestro explorador y ponemos la IP del balanceador.
+
+![Imagen 15](Fotos/15.png)
+![Imagen 16](Fotos/16.png)
 
 # Resultado
-![](Fotos/17.png)
+![Imagen 17](Fotos/17.png)
 
-Pero como queremos que nos muestre la página con un certificado vamos a instalar certbot y configurar un nombre de dominio.
+Pero como queremos que nos muestre la página con un certificado, vamos a instalar Certbot y configurar un nombre de dominio.
 
-![](Fotos/18.png)
-![](Fotos/19.png)
+![Imagen 18](Fotos/18.png)
+![Imagen 19](Fotos/19.png)
 
 Comprobamos que el certificado está activo y asociado.
 
-![](Fotos/20.png)
+![Imagen 20](Fotos/20.png)
 
-Configuración del servidor de apache 1
+# Configuración del servidor de Apache 1
 
 sudo apt update
 sudo apt install -y apache2
 sudo apt install php libapache2-mod-php php-mysql
 
-Volvemos a copiar el archivo por si la volvemos a liar
 
-![](Fotos/21.png)
+Volvemos a copiar el archivo por si la volvemos a liar.
 
-En documentroot la ruta donde tiene que buscar el index.php.
+![Imagen 21](Fotos/21.png)
 
-![](Fotos/22.png)
+En `DocumentRoot`, la ruta donde tiene que buscar el `index.php`.
 
-Activamos el sitio que acabamos de configurar
+![Imagen 22](Fotos/22.png)
 
-![](Fotos/23.png)
+Activamos el sitio que acabamos de configurar.
 
-Copiamos el repositorio git dónde está la aplicación que queremos implementar en la página web.
+![Imagen 23](Fotos/23.png)
 
-![](Fotos/24.png)
-![](Fotos/25.png)
+Copiamos el repositorio git donde está la aplicación que queremos implementar en la página web.
 
-Luego vamos al archivo config en el apache1
+![Imagen 24](Fotos/24.png)
+![Imagen 25](Fotos/25.png)
 
-![](Fotos/26.png)
+Luego vamos al archivo `config` en el Apache 1.
 
-Le tenemos que dar permisos al la carpeta apache1
+![Imagen 26](Fotos/26.png)
 
-![](Fotos/27.png)
+Le tenemos que dar permisos a la carpeta Apache1.
 
-Sudo systemctl restart apache2
-Instalamos mariadb-client para conectarnos al servidor de base de datos
+![Imagen 27](Fotos/27.png)
 
-![](Fotos/28.png)
+sudo systemctl restart apache2
 
-Pasamos la base de datos al servidor mysql
 
-![](Fotos/29.png)
+Instalamos `mariadb-client` para conectarnos al servidor de base de datos.
 
-Configuración del servidor de base de datos (MYSQL)
+![Imagen 28](Fotos/28.png)
 
-![](Fotos/30.png)
+Pasamos la base de datos al servidor MySQL.
 
-Nos vamos al archivo 50-server.conf y donde esta el bind-address ponemos la ip del server mysql
+![Imagen 29](Fotos/29.png)
 
-![](Fotos/31.png)
+# Configuración del servidor de base de datos (MySQL)
 
-Entramos a la base de datos y metemos un usuario para la base de datos que hemos pasado antes
+Lo primero es instalar `mariadb-server`.
 
-![](Fotos/32.png)
-![](Fotos/33.png)
-![](Fotos/34.png)
+![Imagen 30](Fotos/30.png)
 
-Si todo sale bien cuando ponemos nuestro nombre de dns saldra la pagina donde podemos ingresar, eliminar o editar los usuarios de la base de datos.
+Nos vamos al archivo `50-server.conf` y donde está el `bind-address` ponemos la IP del servidor MySQL.
 
-![](Fotos/35.png)
+![Imagen 31](Fotos/31.png)
+
+Entramos a la base de datos y metemos un usuario para la base de datos que hemos pasado antes.
+
+![Imagen 32](Fotos/32.png)
+![Imagen 33](Fotos/33.png)
+![Imagen 34](Fotos/34.png)
+
+Si todo sale bien, cuando ponemos nuestro nombre de DNS, saldrá la página donde podemos ingresar, eliminar o editar los usuarios de la base de datos.
+
+![Imagen 34](Fotos/35.png)

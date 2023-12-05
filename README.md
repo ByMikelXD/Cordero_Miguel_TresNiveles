@@ -2,7 +2,7 @@
 
 Primero tenemos que crear nuestras vpc donde vamos a albergar nuestras dos subredes la subred 1 donde estará el Balanceador junto a nuestros servidores apache y en la segunda subred donde se almacenará el servidor mysql.
 
-![](FOTOS/1.png)
+![](Fotos/1.png)
 
 
 

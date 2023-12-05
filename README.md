@@ -6,7 +6,6 @@ Primero tenemos que crear nuestras vpc donde vamos a albergar nuestras dos subre
 
 
 
-
 Editamos reglas de entrada
 
 
